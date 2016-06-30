@@ -29,14 +29,10 @@ exports.getSiteVersionsAsync = function(inputUrl) {
   });
 };
 
-exports.isUrlInList = function() {
-};
-
-exports.addUrlToList = function() {
-};
-
-exports.isUrlArchived = function() {
-};
-
-exports.downloadUrls = function() {
+exports.loadSiteAsync = function(versionUrl) {
+  return new Promise(function(resolve, result) {
+    client.hget('storage', versionUrl, function(err, result) {
+      !err ? resolve(result) : reject(err);
+    });
+  });
 };
