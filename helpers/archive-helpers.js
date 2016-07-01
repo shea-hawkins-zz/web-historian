@@ -68,9 +68,19 @@ exports.storeSite = function(versionUrl, data) {
   });
 };
 
-exports.storeSite = function(versionUrl, data) {
+exports.updateDirectory = function(inputUrl, timestamp) {
   return new Promise(function(resolve, reject) {
-    
+    exports.isInDirectory(inputUrl).then(function() {
+      return exports.getSiteVersions(inputUrl)
+        .catch(function() {
+          return [];
+        });
+    }).then(function(siteVersions) {
+      siteVersions.push(timestamp);
+      client.hset('directory', inputUrl, JSON.stringify(siteVersions), function(err, data) {
+        !err ? resolve(result) : reject(err);
+      });
+    });
   });
 };
 
