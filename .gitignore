@@ -10,6 +10,7 @@ test/testdata/sites.txt
 .LSOverride
 Icon
 
+
 # Thumbnails
 ._*
 # Files that might appear on external disk
@@ -26,6 +27,7 @@ lib-cov
 *.out
 *.pid
 *.gz
+*.rdb
 
 pids
 logs
