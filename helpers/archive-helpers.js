@@ -52,6 +52,31 @@ exports.popUrl = function() {
   });
 };
 
+exports.trimQueue = function(start, end) {
+  return new Promise(function(resolve, reject) {
+    client.ltrim('siteQueue', end - start, start - end, function(err, data) {
+      !err ? resolve(data) : reject(err);
+    });
+  });
+};
+
+exports.popQueue = function() {
+  return new Promise(function(resolve, reject) {
+    client.llen('siteQueue', function(err, data) {
+      !err ? resolve(data) : reject(err);
+    });
+  }).then(function(len) {
+    return new Promise(function(resolve, reject) {
+      client.lrange('siteQueue', 0, len - 1, function(err, data) {
+        !err ? resolve(data) : reject(err);
+      });
+    });
+  }).then(function(queue) {
+    exports.trimQueue(0, queue.length - 1);
+    return queue;
+  });
+};
+
 exports.removeFromQueue = function(inputUrl) {
   return new Promise(function(resolve, result) {
     client.lrem('siteQueue', 0, inputUrl, function(err, result) {
